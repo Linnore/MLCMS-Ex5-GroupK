@@ -3,7 +3,7 @@ import numpy as np
 class linapx:
     """A linear approximator that minimize least squire errors.
     """
-    def __init__(self, x, fx, contain_bias=False) -> None:
+    def __init__(self, x, fx, add_bias=False) -> None:
         """Given dataset (x, fx), fit a linear function of x to approximate fx.
 
         Args:
@@ -15,11 +15,11 @@ class linapx:
         self.x = x
         self.fx = fx
 
-        if not contain_bias:
+        if add_bias:
             X = np.column_stack((np.ones(self.x.shape[0]), self.x))
         self.coefficient, self.residuals, self.rank, self.s = np.linalg.lstsq(X, self.fx, rcond=None)
 
-    def predict(self, X=None, contain_bias=False):
+    def predict(self, X=None, add_bias=False):
         """Given a set of data points X, predict the value of f(X)
 
         Args:
@@ -33,8 +33,8 @@ class linapx:
 
         if X is None:
             X = self.x
-            
-        if not contain_bias:
+
+        if add_bias:
             X = np.column_stack((np.ones(X.shape[0]), X))
             y_hat = X @ self.coefficient
         return y_hat
