@@ -9,7 +9,7 @@ class linapx:
         Args:
             x (np.ndarray): Nxn
             fx (np.ndarray): Nxd, value of f(x)
-            contain_bias (bool, optional): Indication whether x contains bias coefficient, 
+            add_bias (bool, optional): Indication whether add bias coefficient to x, 
                 i.e. a column of ones as the first column. Defaults to False.
         """
         self.x = x
@@ -17,6 +17,8 @@ class linapx:
 
         if add_bias:
             X = np.column_stack((np.ones(self.x.shape[0]), self.x))
+        else:
+            X = self.x
         self.coefficient, self.residuals, self.rank, self.s = np.linalg.lstsq(X, self.fx, rcond=None)
 
     def predict(self, X=None, add_bias=False):
@@ -24,7 +26,7 @@ class linapx:
 
         Args:
             X (np.ndarray, optional): Mxn. Defaults to None
-            contain_bias (bool, optional): Indication whether X contains bias coefficient, 
+            add_bias (bool, optional): Indication whether add bias coefficient to x, 
                 i.e. a column of ones as the first column. Defaults to False.
 
         Returns:
@@ -36,6 +38,7 @@ class linapx:
 
         if add_bias:
             X = np.column_stack((np.ones(X.shape[0]), X))
-            y_hat = X @ self.coefficient
+        
+        y_hat = X @ self.coefficient
         return y_hat
 
