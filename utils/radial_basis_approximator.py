@@ -47,9 +47,13 @@ class rbapx:
         """
         N = x.shape[0]
         px = np.zeros((N, L))
+        
         for i, xi in enumerate(x):
-            r = (self.center-xi).reshape(-1,1)
-            r = np.linalg.norm(r, axis=1)
+            r = (self.center-xi)
+            if r.ndim == 1:
+                r = np.abs(r)
+            else:
+                r = np.linalg.norm(r, axis=1)
             px[i] = np.exp(-r**2 / e**2)
         return px
 
