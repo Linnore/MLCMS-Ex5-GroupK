@@ -45,16 +45,23 @@ class rbapx:
         Returns:
             px (np.ndarray): NxL, \phi(x)
         """
-        N = x.shape[0]
+        if x.ndim == 1:
+            N = 1
+            m = x.shape[0]
+            x = np.vstack((x, np.zeros(m)))
+        else:
+            N = x.shape[0]
         px = np.zeros((N, L))
         
-        for i, xi in enumerate(x):
+        for i in range(N):
+            xi = x[i, :]
             r = (self.center-xi)
             if r.ndim == 1:
                 r = np.abs(r)
             else:
                 r = np.linalg.norm(r, axis=1)
             px[i] = np.exp(-r**2 / e**2)
+
         return px
 
     def predict(self, x=None):
